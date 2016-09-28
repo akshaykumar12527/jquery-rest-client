@@ -68,10 +68,11 @@
                         return fnError("Wait too long, canceled operation. [" + obj.key + ":" + obj.section + "]");
                     }
                 } else {
+                    var path = obj.current.path ? '/' + obj.current.path : '';
 
                     var ajaxOptions = $.extend({
                         method: obj.current.method,
-                        url: settings.api + '/' + obj.url + obj.current.path,
+                        url: settings.api + '/' + obj.url + path,
                         success: callback || null,
                         cache: settings.cache,
                         headers: obj.current.headers
@@ -142,8 +143,8 @@
                     this.childrens.push(newSection);
                     var url = newUrl || newSection
 
-                    if(this.url){
-                        url = this.url +'/'+ url;
+                    if (this.url) {
+                        url = this.url + '/' + url;
                     }
 
                     this[newSection] = new restControl(newSection, url);
@@ -158,7 +159,7 @@
                         this.current.query[name] = value;
                     }
 
-                    if(!this.current.method){
+                    if (!this.current.method) {
                         this.current.method = 'GET';
                     }
 
@@ -173,7 +174,7 @@
                         this.current.data[name] = value;
                     }
 
-                    if(!this.current.method){
+                    if (!this.current.method) {
                         this.current.method = 'POST';
                     }
                     return this;
@@ -189,27 +190,27 @@
                     return this;
                 }
 
-                this.method = function(value){
+                this.method = function(value) {
                     this.current.method = value;
                     return this;
                 }
 
-                this.isPost = function(){
+                this.isPost = function() {
                     this.current.method = "POST";
                     return this;
                 }
 
-                this.isGet = function(){
+                this.isGet = function() {
                     this.current.method = "GET";
                     return this;
                 }
 
-                this.isPut = function(){
+                this.isPut = function() {
                     this.current.method = "PUT";
                     return this;
                 }
 
-                this.isDelete = function(){
+                this.isDelete = function() {
                     this.current.method = "DELETE";
                     return this;
                 }
@@ -242,7 +243,7 @@
                         this.current.query = value;
                         this.current.path = '';
                     } else {
-                        this.current.path = '/' + value;
+                        this.current.path = value;
                     }
 
                     this.current.method = "GET";
@@ -250,23 +251,30 @@
                     return this;
                 }
 
-                this.create = function(value) {
+                this.create = function(path, value) {
                     this.clear()
-                    this.current.data = value;
+                    this.current.path = path;
+                    this.current.data = value || null;
                     this.current.method = "POST";
                     return this;
                 }
 
-                this.update = function(value) {
+                this.update = function(path, value) {
                     this.clear()
-                    this.current.data = value;
+                    this.current.path = path;
+                    this.current.data = value || null;
                     this.current.method = "PUT";
                     return this;
                 }
 
-                this.delete = function(value) {
-                    this.clear()
-                    this.current.path = '/' + value;
+                this.delete = function(path, value) {
+                    if (!value) {
+                        value = path;
+                    } else {
+                        value = path + '/' + value
+                    }
+
+                    this.current.path = value;
                     this.current.method = "DELETE";
                     return this;
                 }
@@ -280,6 +288,10 @@
                         headers: value.headers || {},
                     }
                     return this;
+                }
+
+                this.action = function(value) {
+                    this.current.path = value;
                 }
 
                 this.get = this.read;
