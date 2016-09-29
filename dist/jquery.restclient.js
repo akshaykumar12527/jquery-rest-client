@@ -284,6 +284,7 @@
 
                 this.action = function(value){
                   this.current.path = '/' + value;
+                  return this;
                 }
 
                 this.get = this.read;
