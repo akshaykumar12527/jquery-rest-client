@@ -53,6 +53,7 @@
             semaphore = {},
             waiting = null,
             restCount = 0,
+            preservPath = false,
             then = function(obj, callback) {
                 var _waiting = (obj.parent > -1 && obj.waiting) ? obj.waiting : waiting
                 if (_waiting && !semaphore[_waiting]) {
@@ -142,8 +143,8 @@
                     this.childrens.push(newSection);
                     var url = newUrl || newSection
 
-                    if(this.url){
-                        url = this.url +'/'+ url;
+                    if (this.url) {
+                        url = this.url + '/' + url;
                     }
 
                     this[newSection] = new restControl(newSection, url);
@@ -158,7 +159,7 @@
                         this.current.query[name] = value;
                     }
 
-                    if(!this.current.method){
+                    if (!this.current.method) {
                         this.current.method = 'GET';
                     }
 
@@ -173,7 +174,7 @@
                         this.current.data[name] = value;
                     }
 
-                    if(!this.current.method){
+                    if (!this.current.method) {
                         this.current.method = 'POST';
                     }
                     return this;
@@ -189,27 +190,27 @@
                     return this;
                 }
 
-                this.method = function(value){
+                this.method = function(value) {
                     this.current.method = value;
                     return this;
                 }
 
-                this.isPost = function(){
+                this.isPost = function() {
                     this.current.method = "POST";
                     return this;
                 }
 
-                this.isGet = function(){
+                this.isGet = function() {
                     this.current.method = "GET";
                     return this;
                 }
 
-                this.isPut = function(){
+                this.isPut = function() {
                     this.current.method = "PUT";
                     return this;
                 }
 
-                this.isDelete = function(){
+                this.isDelete = function() {
                     this.current.method = "DELETE";
                     return this;
                 }
@@ -228,7 +229,9 @@
                         this.current.query = null;
                         this.current.data = null;
                         this.current.method = null;
-                        this.current.path = '';
+                        if (!preservPath) {
+                            this.current.path = '';
+                        }
                     }
                 }
 
@@ -282,9 +285,10 @@
                     return this;
                 }
 
-                this.action = function(value){
-                  this.current.path = '/' + value;
-                  return this;
+                this.action = function(value) {
+                    preservPath = true;
+                    this.current.path = '/' + value;
+                    return this;
                 }
 
                 this.get = this.read;
@@ -296,6 +300,7 @@
 
                 this.then = function(callback) {
                     logInfo('Run the ' + this.key)
+                    preservPath = false;
                     return then(this, callback)
                 }
 
