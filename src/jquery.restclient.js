@@ -304,7 +304,7 @@
                     return then(this, callback)
                 }
 
-                this.exec = function(callback) {
+                this.exec = function() {
                     logInfo('Run the ' + this.key)
                     return then(this)
                 }
