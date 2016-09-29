@@ -295,6 +295,7 @@
 
                 this.setup = function(value){
                   this.current.setup = value
+                  return this;
                 }
 
                 this.get = this.read;
