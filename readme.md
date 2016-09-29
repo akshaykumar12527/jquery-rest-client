@@ -69,7 +69,8 @@ This library is being built to work with CupCoffee Js, specifically Cupcoffee Au
             })
         })
 
-        rest.posts.wait('user').create('add', {title: 'Hello', content: "Word!"}).then(function(data) {
+        //to url/api/user/add, use action method
+        rest.posts.wait('user').action('add').create({title: 'Hello', content: "Word!"}).then(function(data) {
             rest.release('posts')
         })
 ```
@@ -110,5 +111,6 @@ In this example requests the following order: Read User -> Create Post -> Update
 - `setApi:` Defines the API address.
 - `.wait:` Force the model or models below to wait the release of certain event.
 - `.release:` Releases waits.
+- `action:` Add values in the URL path to access methods (actions) server
 
 If the method has not yet defined `.query()` is applied, the method will be set as "GET". If `.data()` is applied, the method will be set to "POST".
