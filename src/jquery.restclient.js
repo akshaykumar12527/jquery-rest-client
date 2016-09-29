@@ -69,6 +69,7 @@
                         return fnError("Wait too long, canceled operation. [" + obj.key + ":" + obj.section + "]");
                     }
                 } else {
+                    var setup = $.extend(settings.setup || {}, obj.current.setup);
 
                     var ajaxOptions = $.extend({
                         method: obj.current.method,
@@ -76,7 +77,7 @@
                         success: callback || null,
                         cache: settings.cache,
                         headers: obj.current.headers
-                    }, settings.setup || {});
+                    }, setup);
 
                     if (obj.current.method == "POST") {
                         ajaxOptions.data = obj.current.data;
@@ -229,6 +230,7 @@
                         this.current.query = null;
                         this.current.data = null;
                         this.current.method = null;
+                        this.current.setup = {};
                         if (!preservPath) {
                             this.current.path = '';
                         }
@@ -289,6 +291,10 @@
                     preservPath = true;
                     this.current.path = '/' + value;
                     return this;
+                }
+
+                this.setup = function(value){
+                  this.current.setup = value
                 }
 
                 this.get = this.read;
