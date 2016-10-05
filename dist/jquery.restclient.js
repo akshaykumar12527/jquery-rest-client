@@ -79,7 +79,7 @@
                         headers: obj.current.headers
                     }, setup);
 
-                    if (obj.current.method == "POST") {
+                    if (obj.current.method == "POST" || obj.current.method == "PUT") {
                         ajaxOptions.data = obj.current.data;
                     } else if (obj.current.method == "GET") {
                         ajaxOptions.data = $.extend(obj.current.query || {}, obj.current.data || {});
