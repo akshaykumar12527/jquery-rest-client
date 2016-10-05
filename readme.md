@@ -11,7 +11,7 @@ Minimal library for restful client based on jQuery Ajax. Include a semaphore tha
 
 This library is being built to work with CupCoffee Js, specifically Cupcoffee Auth JWT, but should work perfect mind in any structure, follow these tips: The communication paths generated here are these standards:
 
-### Create / Insert / Post (method, value) [Method POST]
+### Create / Insert / Post (value) [Method POST]
 
 `[url_api] / [controller] / [method]`
 
@@ -19,11 +19,11 @@ This library is being built to work with CupCoffee Js, specifically Cupcoffee Au
 
 `[url_api] / [controller] / [method] / [id]? Query = query & ...`
 
-### Update (method, value) [Method Put]
+### Update (value) [Method Put]
 
 `[url_api] / [controller] / [method] / [id]`
 
-### Delete (method, value) [Method Delete]
+### Delete (value) [Method Delete]
 
 `[url_api] / [controller] / [method] / [id]`
 
@@ -91,6 +91,7 @@ In this example requests the following order: Read User -> Create Post -> Update
 ```
 
 ## Methods
+c
 
 - `.post, .insert and .create:` Send data in the body of the request using the POST method.
 - `.remove, .delete, .del and .destroy:` Send a removal request with request to the url uses the DELETE method.
