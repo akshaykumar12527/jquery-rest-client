@@ -239,6 +239,7 @@
 
                 this.error = function(callback) {
                     settings.fnError = callback;
+                    return this;
                 }
 
                 this.read = function(value) {
