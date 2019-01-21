@@ -3,7 +3,7 @@
   "version": "0.3.2",
   "homepage": "https://github.com/cupcoffeejs/jquery-rest-client",
   "authors": [
-    "Philippe Assis <assis@phlippeassis.com>"
+    "Akshay Kumar"
   ],
   "description": "Minimal library for restful client based on jQuery Ajax. Include a semaphore that controls the execution of each session.",
   "main": "src/jquery.restclient.min.js",

@@ -19,7 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/cupcoffeejs/jquery-rest-client.git"
   },
-  "author": "Philippe Assis <assis@philippeassis.com> (philippeassis.com)",
+  "author": "Akshay Kumar",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/cupcoffeejs/jquery-rest-client/issues"
