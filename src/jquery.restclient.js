@@ -1,7 +1,7 @@
 /**
- * Created by Philippe Assis
- * assis@philippeassis.com
- * https://github.com/cupcoffeejs/jquery-rest-client
+ * Created by Akshay kumar
+ * https://akshaykumar.tech
+ * https://github.com/akshaykumar12527/jquery-rest-client
  */
 ;
 (function($) {
@@ -22,7 +22,7 @@
             }
         }
 
-        var myName = 'jQuery-Rest-Client',
+        var myName = 'API',
             settings = $.extend({
                 waitingTime: 300,
                 waitLoopLimit: 60,
@@ -53,7 +53,6 @@
             semaphore = {},
             waiting = null,
             restCount = 0,
-            preservPath = false,
             then = function(obj, callback) {
                 var _waiting = (obj.parent > -1 && obj.waiting) ? obj.waiting : waiting
                 if (_waiting && !semaphore[_waiting]) {
@@ -69,7 +68,6 @@
                         return fnError("Wait too long, canceled operation. [" + obj.key + ":" + obj.section + "]");
                     }
                 } else {
-                    var setup = $.extend(settings.setup || {}, obj.current.setup);
 
                     var ajaxOptions = $.extend({
                         method: obj.current.method,
@@ -77,14 +75,17 @@
                         success: callback || null,
                         cache: settings.cache,
                         headers: obj.current.headers
-                    }, setup);
+                    }, settings.setup || {});
 
                     if (obj.current.method == "POST" || obj.current.method == "PUT") {
-                        ajaxOptions.data = obj.current.data;
+                        ajaxOptions.data = JSON.stringify(obj.current.data);
                     } else if (obj.current.method == "GET") {
                         ajaxOptions.data = $.extend(obj.current.query || {}, obj.current.data || {});
                     }
-
+                    if (ajaxOptions.url.slice(-1) == "/") {
+                        ajaxOptions.url = ajaxOptions.url.slice(0, -1);
+                        console.log(ajaxOptions);
+                    }
                     return $.ajax(ajaxOptions);
                 }
             },
@@ -216,11 +217,16 @@
                     return this;
                 }
 
-                this.token = function(xToken, xKey) {
+                this.token = function(xToken) {
                     this.defaultHeaders({
-                        'x-access-token': xToken,
-                        'x-key': xKey
+                        'Authorization': "Bearer " + xToken
                     })
+                    return this;
+                }
+
+                this.setUrl = function(url) {
+                    this.url = url;
+                    return this;
                 }
 
                 this.clear = function(all) {
@@ -230,16 +236,12 @@
                         this.current.query = null;
                         this.current.data = null;
                         this.current.method = null;
-                        this.current.setup = {};
-                        if (!preservPath) {
-                            this.current.path = '';
-                        }
+                        this.current.path = '';
                     }
                 }
 
                 this.error = function(callback) {
                     settings.fnError = callback;
-                    return this;
                 }
 
                 this.read = function(value) {
@@ -281,26 +283,16 @@
                     this.current = {
                         method: value.method || null,
                         query: value.query || null,
-                        data: value.query || null,
+                        data: value.data || null,
                         path: value.path || '',
                         headers: value.headers || {},
                     }
                     return this;
                 }
 
-                this.action = function(value) {
-                    preservPath = true;
-                    this.current.path = '/' + value;
-                    return this;
-                }
-
-                this.setup = function(value){
-                  this.current.setup = value
-                  return this;
-                }
-
                 this.get = this.read;
                 this.post = this.create;
+                this.put = this.update;
                 this.insert = this.create;
                 this.del = this.delete;
                 this.remove = this.delete;
@@ -308,11 +300,10 @@
 
                 this.then = function(callback) {
                     logInfo('Run the ' + this.key)
-                    preservPath = false;
                     return then(this, callback)
                 }
 
-                this.exec = function() {
+                this.exec = function(callback) {
                     logInfo('Run the ' + this.key)
                     return then(this)
                 }
